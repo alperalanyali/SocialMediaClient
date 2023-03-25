@@ -1,13 +1,17 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useHistory, useNavigate } from "react-router-dom";
 
 import Login from "./Login";
 
 const Layout = () => {
   const navigate = useNavigate();
+
   
   const logout = () => {
     localStorage.clear();
     navigate("/login");
+   }
+   const goToProfile = () => {
+    navigate("/profile");    
    }
    
   return (
@@ -25,14 +29,18 @@ const Layout = () => {
                 {/* Sol taraftaki menüler */}
 
                 {/* Sağ taraftaki menüler */}
-                <ul class="navbar-nav">
+                <ul className="navbar-nav">
                     <li className="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                       Profil
+                    <a className="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                       Alper ALANYALI
                     </a>
                         <ul className="dropdown-menu">
                             <li>
-                                <button onClick={logout} class="dropdown-item">Çıkış yap</button>
+                                <button onClick={goToProfile} className="dropdown-item">View Profile</button>
+                            </li>
+                            <li>
+                                
+                                <button onClick={logout} className="dropdown-item">Logout</button>
                             </li>
                         </ul>
                     </li>

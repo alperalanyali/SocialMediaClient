@@ -1,3 +1,7 @@
+body{
+    background-color: #dcdcdc;
+}
+
 .loginBackgroundColor{
     background-color: #044537;
     height:100vh
@@ -13,3 +17,30 @@
     background-color: #ececec;
     box-shadow: 5px 2px 5px #044537;
 }
+.card-div, .card-div2{
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+.card-div2:hover{
+    background-color: #dcdcdc;
+}
+
+.profile-img, .profile-avatar, .profile-comment-avatar{
+    margin-top: 5px;
+    outline-width: 5px;
+    outline-style: solid;
+    outline-color: #ccc;
+    border-radius: 70px;    
+}
+
+.profile-img{
+    width: 150px;
+}
+
+.profile-avatar{
+    width: 30px;    
+}
+
