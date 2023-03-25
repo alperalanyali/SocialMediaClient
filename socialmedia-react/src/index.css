@@ -1,0 +1,15 @@
+.loginBackgroundColor{
+    background-color: #044537;
+    height:100vh
+}
+.loginBackgroundImage{
+    background-image: url('../public/loginBackground.jpeg');
+}
+
+.login-div{
+    border:2px solid orange;
+    border-radius: 40px;
+    padding:40px;
+    background-color: #ececec;
+    box-shadow: 5px 2px 5px #044537;
+}
