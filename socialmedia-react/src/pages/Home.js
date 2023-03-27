@@ -90,7 +90,7 @@ const Home = () => {
                   <div>
                   <img
                         src={post.imageUrl}
-                
+        
                       />
                     <p dangerouslySetInnerHTML={{__html:post.content}}></p>
                   </div>

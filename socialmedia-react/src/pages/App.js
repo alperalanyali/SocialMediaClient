@@ -5,7 +5,7 @@ import Layout from "./Layout"
 import Login from "./Login"
 import NotFound from "./NotFound"
 import PrivateRoute from "../components/PrivateRoute";
-import Profile from "./Profile";
+import Profile from "./Profile/Profile";
 import Register from "./Register";
 
 function App() {
