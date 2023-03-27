@@ -1,14 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-import Register from "./Register";
+import callToast from '../commons/services/Toastify-service'
+import requestApi from "../commons/services/api-service";
 
 const Login = () => {
  const navigate = useNavigate();
- const goToRegister = ()=>{
-    navigate('/register')
- }
- const login = ()=>{
+const [loginInfo,setLoginInfo] = useState({  
+  email:'',
+  password:''
+})
+ const login = (e)=>{
+  e.preventDefault()  
+  requestApi('post','/auth/login',loginInfo,(res)=>{
+    
+   if(res.success){
+    callToast("success","Hoşgeldiniz",3000);
+    localStorage.setItem('user',JSON.stringify(res.result._id));
     navigate('/');
+   } else {
+    callToast("error",res.message,5000)
+   }
+   
+  });  
+  
+  // navigate('/');
+ }
+
+ const handleInput = (e)=>{
+  e.preventDefault();
+  const {name,value} = e.target;
+  setLoginInfo((prevLogin) => ({
+    ...prevLogin,
+    [name]: value,
+  }));  
  }
   return (
     <>
@@ -17,17 +42,17 @@ const Login = () => {
         <div className="col-lg-4 loginBackgroundColor">
           <div className="login-div" style={{ marginTop: "200px" }}>
             <div className="text-center">Login Page</div>
-            <form autoComplete="off" >
+            <form autoComplete="off" onSubmit={login} >
                 <div className="form-group">
-                    <label className="text-muted" htmlFor="userName">Username</label>
-                    <input className="form-control" name="userName"  />
+                    <label className="text-muted" htmlFor="Email">Email</label>
+                    <input className="form-control" name="email" value={loginInfo.email} onChange={handleInput} />
                 </div>
                 <div className="form-group">
-                    <label className="text-muted" htmlFor="password">Password</label>
-                    <input className="form-control" name="password" />
+                    <label className="text-muted" htmlFor="password" >Password</label>
+                    <input className="form-control" name="password" value={loginInfo.password} onChange={handleInput} />
                 </div>
                 <div className="form-group mt-2">
-                    <button className="btn btn-outline-primary w-100" onClick={login}>Login</button>
+                    <button className="btn btn-outline-primary w-100" type="submit" >Login</button>
                     <Link
                      to='/register'
                      style={{
@@ -35,8 +60,7 @@ const Login = () => {
                      }}
                      className="mt-2"
                      >Register</Link>
-                </div>
-              
+                </div>      
             </form>
           </div>
         </div>

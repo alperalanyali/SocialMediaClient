@@ -33,7 +33,7 @@ body{
     outline-width: 5px;
     outline-style: solid;
     outline-color: #ccc;
-    border-radius: 70px;    
+    border-radius: 100%;    
 }
 
 .profile-img{

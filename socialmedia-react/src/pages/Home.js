@@ -2,60 +2,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import PostModal from "./PostModal";
-import axios from "axios";
+import requestApi from '../commons/services/api-service'
 
 const Home = () => {
-  const posts = [
-    {
-      id: "1",
-      title: "Deneme 1",
-      content: "Deneme içerik",
-    },
-    {
-      id: "2",
-      title: "Deneme 2",
-      content: "Deneme içerik 2",
-    },
-    {
-      id: "3",
-      title: "Deneme 3",
-      content: "Deneme içerik 3",
-    },
-    {
-        id: "1",
-        title: "Deneme 1",
-        content: "Deneme içerik",
-      },
-      {
-        id: "2",
-        title: "Deneme 2",
-        content: "Deneme içerik 2",
-      },
-      {
-        id: "3",
-        title: "Deneme 3",
-        content: "Deneme içerik 3",
-      },
-      {
-        id: "1",
-        title: "Deneme 1",
-        content: "Deneme içerik",
-      },
-      {
-        id: "2",
-        title: "Deneme 2",
-        content: "Deneme içerik 2",
-      },
-      {
-        id: "3",
-        title: "Deneme 3",
-        content: "Deneme içerik 3",
-      },
-  ];
+  const [posts,setPosts]= useState([]);
+  const [userInfo,setUserInfo] = useState({})
   const navigate = useNavigate();
   const goToProfile = ()=>{
     navigate('/profile')
   }
+  const getPosts  = ()=>{
+    requestApi('get','/post/getAll',null,(res)=>{
+      setPosts(res.data);
+      console.log(posts);  
+    });
+  }
+  const getUserInfo = async ()=>{
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(user);
+    requestApi('get',`/auth/getUser/${user}`,null,(res)=>{
+        setUserInfo(res.user);
+        console.log(user);
+    });
+  }
+  useEffect(()=>{
+    getUserInfo();
+    getPosts();    
+  },[])
   return (
     <>
       <div style={{ marginTop: "20px", marginLeft: "5%", marginRight: "5%" }}>
@@ -63,12 +36,12 @@ const Home = () => {
           <div className="col-md-3 ">
             <div className="text-center card-div">
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkdQArnvrchduwBUmj2T3rjla4bX5kQTx1TYd7IlEgUg&s"
+                src={userInfo?.avatar}
                 className="profile-img"
                 onClick={goToProfile}
               />
-              <h4 className="mt-4 mb-4">Alper ALANYALI</h4>
-              <h5 className="text-muted">Full Stack Developer</h5>
+              <h4 className="mt-4 mb-4">{userInfo.fullName}</h4>
+              <h5 className="text-muted">{userInfo.profession}</h5>
             </div>
     
           </div>
@@ -91,32 +64,35 @@ const Home = () => {
               </div>
             </div>
             <hr></hr>
-            {posts.map((post) => {
+            {posts.map((post,index) => {
               return (
                 <div
-                  key={post.id}
+                  key={index}
                   className="card-div mx-4"
                   style={{ marginBottom: "30px" }}
                 >
                   <div className="row mb-4 mx-1">
                     <div className="col-md-1">
                       <img
-                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkdQArnvrchduwBUmj2T3rjla4bX5kQTx1TYd7IlEgUg&s"
+                        src={post.user[0].avatar}
                         className="profile-avatar"
                       />
                     </div>
                     <div className="col-md-8">
-                      <span className="mx-2">Alper ALANYALI</span>
-                      <span className="mx-2">Full Stack Developer</span>
+                      <span className="mx-2">{post.user[0].fullName}</span>
+                      <span className="mx-2">{post.user[0 ].profession}</span>
                  
                     </div>
                     <div className="col-md-2">
-                        <span className="text-end">10.03.2023 08:30</span>
+                        <span className="text-end">{post.createdDate}</span>
                     </div>
                   </div>
                   <div>
-                    <h4>{post.title}</h4>
-                    <p>{post.content}</p>
+                  <img
+                        src={post.imageUrl}
+                
+                      />
+                    <p dangerouslySetInnerHTML={{__html:post.content}}></p>
                   </div>
                 </div>
               );
