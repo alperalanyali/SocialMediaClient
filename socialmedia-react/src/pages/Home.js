@@ -40,8 +40,8 @@ const Home = () => {
                 className="profile-img"
                 onClick={goToProfile}
               />
-              <h4 className="mt-4 mb-4">{userInfo.fullName}</h4>
-              <h5 className="text-muted">{userInfo.profession}</h5>
+              <h4 className="mt-4 mb-4">{userInfo?.fullName}</h4>
+              <h5 className="text-muted">{userInfo?.profession}</h5>
             </div>
     
           </div>
@@ -79,8 +79,8 @@ const Home = () => {
                       />
                     </div>
                     <div className="col-md-8">
-                      <span className="mx-2">{post.user[0].fullName}</span>
-                      <span className="mx-2">{post.user[0 ].profession}</span>
+                      <span className="mx-2">{post.user[0]?.fullName}</span>
+                      <span className="mx-2">{post.user[0 ]?.profession}</span>
                  
                     </div>
                     <div className="col-md-2">

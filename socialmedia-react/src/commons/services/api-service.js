@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseApiUrl = 'http://localhost:4200/api/v1'
+const baseApiUrl = 'http://localhost:5001/api/v1'
 
 const requestApi = (method,apiUrl,data,callBack)=>{
     if(method ==='get'){
