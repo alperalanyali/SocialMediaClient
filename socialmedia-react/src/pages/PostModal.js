@@ -1,15 +1,18 @@
+import {API_URL, FILE_URL} from '../commons/constants';
+import { useEffect, useState } from "react";
+
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import getUserInfo from '../commons/services/getUserInfo'
 import requestApi from '../commons/services/api-service'
-import { useState } from "react";
+
 const PostModal = () => {
   const [imageUrl,setImageUrl] = useState();
   const [content,setContent] = useState('');
-  
+  const [userInfo,setUserInfo] = useState()
   const addPost = (e)=>{  
       let userId = JSON.parse(localStorage.getItem('user'));
-      
-      debugger;
+
       e.preventDefault();
       let formData = new FormData();
       formData.append("imageUrl",imageUrl);
@@ -17,11 +20,18 @@ const PostModal = () => {
       formData.append("userId",userId);
       requestApi("post","/post/createNewPost",formData,(res)=>{
         console.log(res);
+        let btnClose = document.getElementById('btnClose');
+        btnClose.click();
+        
       })
   
   }
 
-  
+  useEffect(()=>{
+    getUserInfo((res)=>{
+      setUserInfo(res);
+    })
+  },[])
   const handleImageChange = (e)=>{      
       // console.log(e.target.files[0]);
       debugger;
@@ -41,17 +51,18 @@ const PostModal = () => {
           <div className="modal-header">
             <form></form>
             <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkdQArnvrchduwBUmj2T3rjla4bX5kQTx1TYd7IlEgUg&s"
+              src={FILE_URL+ ''+userInfo?.avatar}
               className="profile-avatar"
             />
             <h4 className="modal-title fs-5 mx-4" id="postAddModalModalLabel">
-              Alper ALANYALI
+              {userInfo?.fullName}
             </h4>
             <button
               type="button"
               className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
+              id="btnClose"
             ></button>
           </div>
           <form onSubmit={addPost}>

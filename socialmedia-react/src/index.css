@@ -38,9 +38,11 @@ body{
 
 .profile-img{
     width: 150px;
+    height:150px;
 }
 
 .profile-avatar{
-    width: 30px;    
+    width: 30px; 
+    height: 30px;   
 }
 

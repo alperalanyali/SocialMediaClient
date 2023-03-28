@@ -2,21 +2,17 @@ import { Link, Outlet, useHistory, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Login from "./Login";
+import getUserInfo from "../commons/services/getUserInfo";
 import requestApi from '../commons/services/api-service'
 
 const Layout = () => {
   const navigate = useNavigate();
   const [userInfo,setUserInfo] = useState({})
-  const getUserInfo = async ()=>{
-    const user = JSON.parse(localStorage.getItem('user'));
-    console.log(user);
-    requestApi('get',`/auth/getUser/${user}`,null,(res)=>{
-        setUserInfo(res.user);
-        console.log(user);
-    });
-  }
+
   useEffect(()=>{
-    getUserInfo();  
+    getUserInfo(res => {
+        setUserInfo(res);
+    })
   },[])
   const logout = () => {
     localStorage.clear();

@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 
-import callToast from '../../commons/services/Toastify-service'
+import callToast from "../../commons/services/Toastify-service";
 import requestApi from "../../commons/services/api-service";
 
-const ProfileModal = (props) => {
+const ProfileModal = ({ getUserInfo }) => {
   const [user, setUser] = useState({});
-  const getUserInfo = async () => {
+  const [imageUrl, setImageUrl] = useState();
+  const getUserInfo2 = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     requestApi("get", `/auth/getUser/${user}`, null, (res) => {
       setUser(res.user);
-  
     });
   };
-  useEffect(()=>{
-    getUserInfo();
-  },[])
-  
+  useEffect(() => {
+    getUserInfo2();
+  }, []);
+
   const handleInput = (e) => {
-      
     const { name, value } = e.target;
     setUser((prevUser) => ({
       ...prevUser,
@@ -26,43 +25,52 @@ const ProfileModal = (props) => {
   };
   const updateUser = async (e) => {
     e.preventDefault();
-    
-    debugger;
-    await requestApi("post", "/auth/updateUser", user, (res) => {
-      const btnClose = document.getElementById('btnClose');
-      callToast('success',res.message,3000);
+    let formData = new FormData();
+    formData.append("_id", user._id);
+    formData.append("email", user.email);
+    formData.append("fullname", user.fullname);
+    formData.append("password", user.password);
+    formData.append("profession", user.profession);
+    formData.append("avatar", imageUrl);
+    formData.append("bio", user.bio);
+    formData.append("phone", user.phone);
+    await requestApi("post", "/auth/updateUser", formData, (res) => {
+      const btnClose = document.getElementById("btnClose");
+      callToast("success", res.message, 3000);
       getUserInfo();
       btnClose.click();
     });
   };
 
+  const handleImageChange = (e) => {
+    setImageUrl(e.target.files[0]);
+  };
   return (
     <div
-      class="modal fade"
+      className="modal fade"
       id="profileModal"
       tabindex="-1"
       aria-labelledby="profileModallLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5" id="profileModalLabel">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h1 className="modal-title fs-5" id="profileModalLabel">
               Edit Profile
             </h1>
             <button
               type="button"
-              class="btn-close"
+              className="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
               id="btnClose"
             ></button>
           </div>
 
-          <div class="modal-body">
-            <div className="form-group mb-4">
-              <label htmlFor="email" className="tex-muted">
-        
+          <div className="modal-body">
+            <div classNameName="form-group mb-4">
+              <label htmlFor="email" classNameName="tex-muted">
                 Email
               </label>
               <input
@@ -73,8 +81,13 @@ const ProfileModal = (props) => {
                 onChange={handleInput}
               />
             </div>
-            <div className="form-group mb-4">
-              <label htmlFor="fullName" className="tex-muted">
+            <input
+              type="file"
+              className="form-control mt-2 mb-2"
+              onChange={handleImageChange}
+            />
+            <div classNameName="form-group mb-4">
+              <label htmlFor="fullName" classNameName="tex-muted">
                 {" "}
                 Fullname
               </label>
@@ -86,7 +99,7 @@ const ProfileModal = (props) => {
                 onChange={handleInput}
               />
             </div>
-            <div className="form-group mb-4">
+            <div classNameName="form-group mb-4">
               <label htmlFor="password" className="tex-muted">
                 Password
               </label>
@@ -98,7 +111,7 @@ const ProfileModal = (props) => {
                 onChange={handleInput}
               />
             </div>
-            <div className="form-group mb-4">
+            <div classNameName="form-group mb-4">
               <label htmlFor="proffesion" className="tex-muted">
                 Profession
               </label>
@@ -110,10 +123,30 @@ const ProfileModal = (props) => {
                 onChange={handleInput}
               />
             </div>
+            <div className="from-group mb-4">
+              <label htmlFor="phone">Phone Number</label>
+              <input
+                type="text"
+                className="form-control"
+                name="phone"
+                value={user?.phone}
+                onChange={handleInput}
+              />
+            </div>
+            <div className="from-group mb-4">
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                name="bio"
+                className="form-control"
+                value={user?.bio}
+                onChange={handleInput}
+              ></textarea>
+            </div>
           </div>
-          <div className="modal-footer">
-            <button type="submit" class="btn btn-primary" onClick={updateUser}>
-              Update
+          <div class="modal-footer">
+         
+            <button type="button" class="btn btn-primary" onClick={updateUser}>
+                Update
             </button>
           </div>
         </div>

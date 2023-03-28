@@ -1,37 +1,57 @@
+import { API_URL, FILE_URL } from "../commons/constants";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import PostModal from "./PostModal";
+import getUserInfo from "../commons/services/getUserInfo";
 import requestApi from "../commons/services/api-service";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [userInfo, setUserInfo] = useState({});
+  
   const navigate = useNavigate();
   const goToProfile = () => {
     navigate("/profile");
   };
   const getPosts = () => {
     requestApi("get", "/post/getAll", null, (res) => {
-      setPosts(res.data);      
-    });
-  };
-  const getUserInfo = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    console.log(user);
-    requestApi("get", `/auth/getUser/${user}`, null, (res) => {
-      setUserInfo(res.user);  
+      setPosts(res.data);
+      console.log(posts);
     });
   };
   useEffect(() => {
-    getUserInfo();
+    getUserInfo((res) => {
+      setUserInfo(res);
+    });
     getPosts();
   }, []);
-  
-  const showComment = (index) => {        
+
+  const showComment = (index) => {
     let element = document.getElementById("div-" + index);
     element.style = "";
   };
+
+  const sendComment = async (postId, index) => {
+    console.log(postId);
+    let comment = document.getElementById("text-" + index);
+    console.log(comment.value);
+    let model = {
+      userId: userInfo._id,
+      commentUserId: comment.value,
+      postId: postId,
+    };
+    await requestApi("post", "/comment/create", model, (res) => {
+      console.log(res);
+    });
+  };
+  const likeOrUnlike = async (postId) => {
+    debugger;
+    let model = { userId:userInfo._id, postId: postId };
+    await requestApi('post', "/likes/likeOrUnlike", model,(res)=>{
+      console.log(res)
+    });
+}
   return (
     <>
       <div style={{ marginTop: "20px", marginLeft: "5%", marginRight: "5%" }}>
@@ -39,7 +59,7 @@ const Home = () => {
           <div className="col-md-3 ">
             <div className="text-center card-div">
               <img
-                src={userInfo?.avatar}
+                src={FILE_URL + userInfo?.avatar}
                 className="profile-img"
                 onClick={goToProfile}
               />
@@ -52,7 +72,7 @@ const Home = () => {
               <div className="row p-1">
                 <div className="col-md-2">
                   <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkdQArnvrchduwBUmj2T3rjla4bX5kQTx1TYd7IlEgUg&s"
+                    src={FILE_URL + "" + userInfo?.avatar}
                     className="profile-avatar"
                   />
                 </div>
@@ -76,7 +96,7 @@ const Home = () => {
                   <div className="row mb-4 mx-1">
                     <div className="col-md-1">
                       <img
-                        src={post.user[0].avatar}
+                        src={FILE_URL + "" + post.user[0]?.avatar}
                         className="profile-avatar"
                       />
                     </div>
@@ -89,33 +109,56 @@ const Home = () => {
                     </div>
                   </div>
                   <div>
-                    <img src={post.imageUrl} />
+                    <img src={FILE_URL + "" + post.imageUrl} />
                     <p dangerouslySetInnerHTML={{ __html: post.content }}></p>
                   </div>
                   <div className="row">
                     <div className="col-md-4">
-                      <button className="btn btn-default">
-                        <i class="fa-regular fa-thumbs-up"></i>
+                      <button className="btn btn-default" onClick={() => likeOrUnlike(post._id)}>
+                        <i className="fa-regular fa-thumbs-up"></i>
                         Like
                       </button>
                     </div>
                     <div className="col-md-4">
-                      <button className="btn btn-default mx-2"  onClick={()=> showComment(index)}>
+                      <button
+                        className="btn btn-default mx-2"
+                        onClick={() => showComment(index)}
+                      >
                         <i className="fa-regular fa-comment mx-2"></i>
                         Comment
                       </button>
                     </div>
-                    <div className="mt-4"
-                        style={{display:'none'}}
-                        id={`div-${index}`}
+                    <div
+                      className="mt-4"
+                      style={{ display: "none" }}
+                      id={`div-${index}`}
                     >
-                    <div className="input-group mb-3 mt-3">
-                                            <input type="text" className="form-control" placeholder="Add a comment..."
-                                                style={{ borderRadius: "25px 0px 0px 25px" }} />
-                                            <button className="btn btn-success" type="button" id="button-addon2"
-                                                style={{ borderRadius: "0px 25px 25px 0px" }}>Comment</button>
-                                        </div>
-                      
+                      <div className="input-group mb-3 mt-3">
+                        <input
+                          type="text"
+                          id={"text-" + index}
+                          className="form-control"
+                          placeholder="Add a comment..."
+                          style={{ borderRadius: "25px 0px 0px 25px" }}
+                        />
+                        <button
+                          className="btn btn-success"
+                          type="button"
+                          id="button-addon2"
+                          style={{ borderRadius: "0px 25px 25px 0px" }}
+                          onClick={() => sendComment(post._id, index)}
+                        >
+                          Comment
+                        </button>
+                      </div>
+                      <br />
+                      {post.comments.map((comment, index) => {
+                        return (
+                          <div key={index}>                                             
+                            <p>{comment.comment}</p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
