@@ -57,7 +57,7 @@ const Profile = () => {
           </div>
         </div>
       </div>
-      <ProfileModal user={userInfo}></ProfileModal>
+      <ProfileModal></ProfileModal>
     </>
   );
 };

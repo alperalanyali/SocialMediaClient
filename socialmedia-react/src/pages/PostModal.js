@@ -6,17 +6,22 @@ const PostModal = () => {
   const [imageUrl,setImageUrl] = useState();
   const [content,setContent] = useState('');
   
-  const addPost = (e)=>{
-    debugger;
+  const addPost = (e)=>{  
+      let userId = JSON.parse(localStorage.getItem('user'));
+      
+      debugger;
       e.preventDefault();
       let formData = new FormData();
       formData.append("imageUrl",imageUrl);
       formData.append("content",content);
-      formData.append("userId","b3da5d4d-a6fe-44e0-976c-20995dea40bd");
+      formData.append("userId",userId);
       requestApi("post","/post/createNewPost",formData,(res)=>{
         console.log(res);
       })
+  
   }
+
+  
   const handleImageChange = (e)=>{      
       // console.log(e.target.files[0]);
       debugger;

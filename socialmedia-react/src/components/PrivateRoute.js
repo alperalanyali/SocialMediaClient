@@ -1,23 +1,21 @@
-import {Navigate, Redirect, Route} from 'react-router-dom'
+import {Navigate, Route} from 'react-router-dom'
 
-function PrivateRoute({ children }) {
-    function isLoggedIn() {
-        const user = localStorage.getItem("user"); // Kullanıcının bilgilerini localStorage'dan alın
-      
-        return user ? true : false; // Kullanıcının var olup olmadığını kontrol edin
-      }
+import ErrorPage from '../pages/Error';
+import Home from '../pages/Home';
+import Layout from '../pages/Layout';
+import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
+import Profile from '../pages/Profile/Profile';
+
+function PrivateRoute({ component: Element, ...rest }) {
+  const isLoggedIn = false; // burada isLoggedIn değişkeninin durumunu kontrol edin.
   
-    return (
-      <Route
-        render={({ location }) =>
-          isLoggedIn ? (
-            children
-          ) : (
-            <Navigate to="/login" state={{ from: location }} replace />
-          )
-        }
-      ></Route>
-    );
+  if(isLoggedIn){
+    return <Route path='/' element={<Layout/>}></Route>
+  }else {
+    return <Navigate to="/" />;
   }
+}
+
 
   export default PrivateRoute;  

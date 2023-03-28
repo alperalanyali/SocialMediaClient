@@ -1,5 +1,6 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Router, Routes, Switch } from "react-router-dom";
 
+import ErrorPage from "./Error";
 import Home from "./Home"
 import Layout from "./Layout"
 import Login from "./Login"
@@ -9,11 +10,12 @@ import Profile from "./Profile/Profile";
 import Register from "./Register";
 
 function App() {
-  function isLoggedIn() {
-    const user = localStorage.getItem("user"); // Kullanıcının bilgilerini localStorage'dan alın
+  // function isLoggedIn() {
+  //   const user = localStorage.getItem("user"); // Kullanıcının bilgilerini localStorage'dan alın
   
-    return user ? true : false; // Kullanıcının var olup olmadığını kontrol edin
-  }
+  //   return user ? true : false; // Kullanıcının var olup olmadığını kontrol edin
+  // }
+
   return (
     <div>
         <BrowserRouter>
@@ -23,12 +25,14 @@ function App() {
               <Route path='/' element={<Layout/>}>
                   <Route index element={<Home/>}></Route>
                   <Route path="profile" element={<Profile/>}></Route>
+                  <Route path="error" element={<ErrorPage/>}></Route>
                   <Route path="*" element={<NotFound/>}></Route>
               </Route>
 
            
           </Routes>
         </BrowserRouter>
+
 
     </div>
   );
