@@ -1,8 +1,8 @@
 import CallToast from "./Toastify-service";
 import axios from "axios";
 
-const baseApiUrl = 'http://localhost:5001/api/v1'
-
+// const baseApiUrl = "http://localhost:5001/api/v1"
+const baseApiUrl="https://socialmedia-o9bv.onrender.com/api/v1"
 const requestApi = (method,apiUrl,data,callBack)=>{
         try {
             if(method ==='get'){

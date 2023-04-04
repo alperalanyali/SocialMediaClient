@@ -1,8 +1,8 @@
-import {API_URL, FILE_URL} from '../commons/constants';
 import { useEffect, useState } from "react";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { FILE_URL } from '../commons/constants';
 import getUserInfo from '../commons/services/getUserInfo'
 import requestApi from '../commons/services/api-service'
 

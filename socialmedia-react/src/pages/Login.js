@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 
 import callToast from '../commons/services/Toastify-service'
 import requestApi from "../commons/services/api-service";
+import { useState } from "react";
 
 const Login = () => {
  const navigate = useNavigate();
