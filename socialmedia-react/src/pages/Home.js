@@ -9,7 +9,7 @@ import requestApi from "../commons/services/api-service";
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [userInfo, setUserInfo] = useState({});
-  
+
   const navigate = useNavigate();
   const goToProfile = () => {
     navigate("/profile");
@@ -25,6 +25,7 @@ const Home = () => {
       setUserInfo(res);
     });
     getPosts();
+    console.log(posts);
   }, []);
 
   const showComment = (index) => {
@@ -33,25 +34,28 @@ const Home = () => {
   };
 
   const sendComment = async (postId, index) => {
+    debugger;
     console.log(postId);
     let comment = document.getElementById("text-" + index);
     console.log(comment.value);
     let model = {
-      userId: userInfo._id,
-      commentUserId: comment.value,
+      commentUserId: userInfo._id,
+      comment: comment.value,
       postId: postId,
     };
     await requestApi("post", "/comment/create", model, (res) => {
       console.log(res);
+      comment.value = "";
+      getPosts();
     });
   };
   const likeOrUnlike = async (postId) => {
     debugger;
-    let model = { userId:userInfo._id, postId: postId };
-    await requestApi('post', "/likes/likeOrUnlike", model,(res)=>{
-      console.log(res)
+    let model = { userId: userInfo._id, postId: postId };
+    await requestApi("post", "/likes/likeOrUnlike", model, (res) => {
+      console.log(res);
     });
-}
+  };
   return (
     <>
       <div style={{ marginTop: "20px", marginLeft: "5%", marginRight: "5%" }}>
@@ -96,13 +100,13 @@ const Home = () => {
                   <div className="row mb-4 mx-1">
                     <div className="col-md-1">
                       <img
-                        src={FILE_URL + "" + post.user[0]?.avatar}
+                        src={FILE_URL + "" + post.users[0]?.avatar}
                         className="profile-avatar"
                       />
                     </div>
                     <div className="col-md-8">
-                      <span className="mx-2">{post.user[0]?.fullName}</span>
-                      <span className="mx-2">{post.user[0]?.profession}</span>
+                      <span className="mx-2">{post.users[0]?.fullName}</span>
+                      <span className="mx-2">{post.users[0]?.profession}</span>
                     </div>
                     <div className="col-md-2">
                       <span className="text-end">{post.createdDate}</span>
@@ -114,7 +118,10 @@ const Home = () => {
                   </div>
                   <div className="row">
                     <div className="col-md-4">
-                      <button className="btn btn-default" onClick={() => likeOrUnlike(post._id)}>
+                      <button
+                        className="btn btn-default"
+                        onClick={() => likeOrUnlike(post._id)}
+                      >
                         <i className="fa-regular fa-thumbs-up"></i>
                         Like
                       </button>
@@ -154,8 +161,32 @@ const Home = () => {
                       <br />
                       {post.comments.map((comment, index) => {
                         return (
-                          <div key={index}>                                             
-                            <p>{comment.comment}</p>
+                          <div key={index} className="row mx-4 mt-4">
+                            <div className="col-md-2 align-middle">
+                              <img
+                                src={FILE_URL + "" + comment.user.avatar}
+                                className="profile-avatar"
+                              />
+                            </div>
+                            <div
+                              className="col-md-10 p-2 rounded"
+                              style={{ backgroundColor: "#dcdcdc" }}
+                            >
+                              <div className="row">
+                                <div className="col-md-8">
+                                  <span>
+                                    <strong>{comment.user.fullName}</strong>
+                                  </span>
+                                  <p className="text-muted">{comment.user.profession}</p>
+                                  <p>{comment.comment}</p>
+                                </div>
+                                <div className="col-md-4">
+                                    <span>{comment.createadDate}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* <p>{comment.user[0]?.fullName}</p> */}
                           </div>
                         );
                       })}
