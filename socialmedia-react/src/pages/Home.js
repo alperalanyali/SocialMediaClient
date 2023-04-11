@@ -113,7 +113,7 @@ const Home = () => {
                     </div>
                   </div>
                   <div>
-                    <img src={FILE_URL + "" + post.imageUrl} />
+                    <img src={'https://drive.google.com/uc?id='+post.imageUrl} />
                     <p dangerouslySetInnerHTML={{ __html: post.content }}></p>
                   </div>
                   <div className="row">

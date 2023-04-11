@@ -44,7 +44,7 @@ const Profile = () => {
           <div className="row">
             <div className="col-md-12">
               <img
-                src={FILE_URL+''+userInfo.avatar}
+                src={FILE_URL+userInfo.avatar}
                 className="profile-img"
               />
             </div>

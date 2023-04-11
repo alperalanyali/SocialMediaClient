@@ -12,6 +12,7 @@ const [loginInfo,setLoginInfo] = useState({
 })
  const login = (e)=>{
   e.preventDefault()  
+  console.log(loginInfo);
   requestApi('post','/auth/login',loginInfo,(res)=>{
     
    if(res.success){

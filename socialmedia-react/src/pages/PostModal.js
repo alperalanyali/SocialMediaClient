@@ -12,7 +12,7 @@ const PostModal = () => {
   const [userInfo,setUserInfo] = useState()
   const addPost = (e)=>{  
       let userId = JSON.parse(localStorage.getItem('user'));
-
+      
       e.preventDefault();
       let formData = new FormData();
       formData.append("imageUrl",imageUrl);
